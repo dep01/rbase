@@ -8,17 +8,18 @@ import { useForm } from "react-hook-form";
 // import { doLogin } from "./store";
 import { GlobalLoadingBlock, CustomInput } from "../../components";
 import { LOGIN_FORM_SCHEMA } from "./store/schema_form";
-import { useYupValidationResolver } from "../../utils/resolver";
+import useValidationSchema from "../../utils/resolver";
 import { LOGIN_ACTION } from "./store";
 import { showToast } from "../../utils/global_store";
 function Login({dispatch}) {
   const navigate = useNavigate();
-  const resolver = useYupValidationResolver(LOGIN_FORM_SCHEMA);
+  const resolver = useValidationSchema(LOGIN_FORM_SCHEMA);
   const {
     handleSubmit,
     control,
-    formState: { errors,isValid },
+    formState: { errors },
   } = useForm({ resolver });
+  
   const state = useSelector((state) =>
     USE_GLOBAL_STATE(state[REDUCER.GLOBAL_REDUCER])
   );

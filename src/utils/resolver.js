@@ -1,34 +1,40 @@
+import React, { useCallback } from 'react';
 import * as yup from "yup";
-import React, { useCallback } from "react";
-export const useYupValidationResolver = (schema) => {
-  // const validationSchema =  yup.object(schema);
-  useCallback(
-    async (data) => {
-      try {
-        const values = await schema.validate(data, {
-          abortEarly: false,
-        });
 
-        return {
-          values,
-          errors: {},
-        };
-      } catch (errors) {
-        return {
-          values: {},
-          errors: errors.inner.reduce(
-            (allErrors, currentError) => ({
-              ...allErrors,
-              [currentError.path]: {
-                type: currentError.type ?? "validation",
-                message: currentError.message,
-              },
-            }),
-            {}
-          ),
-        };
-      }
+const useYupValidationResolver = validationSchema =>
+useCallback(
+    async data => {
+        try {
+            const values = await validationSchema.validate(data, {
+                abortEarly: false
+            });
+
+            return {
+                values,
+                errors: {}
+            };
+        } catch (errors) {
+            return {
+                values: {},
+                errors: errors.inner.reduce(
+                (allErrors, currentError) => ({
+                    ...allErrors,
+                    [currentError.path]: {
+                    type: currentError.type ?? "validation",
+                    message: currentError.message
+                    }
+                }),
+                {}
+                )
+            };
+        }
     },
-    [schema]
-  );
-};
+    [validationSchema]
+);
+
+const useValidationSchema = (objectSchema = {}) => {
+    let schema = yup.object(objectSchema);
+    return useYupValidationResolver(schema);
+}
+
+export default useValidationSchema;
