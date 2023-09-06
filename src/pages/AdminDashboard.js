@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
+import Footer from "../components/moleculs/Footer";
 import {
   BellIcon,
   MagnifyingGlassIcon,
@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { SysValidateForm, showToast } from "../utils/global_store";
 import { useEffect } from "react";
-import ActionModal from "../components/ActionModal";
+import ActionModal from "../components/moleculs/ActionModal";
 import { Popconfirm } from "antd";
 import { routes_name } from "../route/static_route";
 

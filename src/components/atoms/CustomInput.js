@@ -13,6 +13,7 @@ const CustomInput = ({
   style = {},
   rules = {},
   classname = "",
+  classContainer ="",
   type='text',
   onKeydown,
   onPaste
@@ -27,9 +28,9 @@ const CustomInput = ({
     rules,
     defaultvalue,
   });
-
+  
   return (
-    <div className={`col ${classname}`}>
+    <div className={`col ${classContainer}`}>
       <div className="form-group">
         {label ? (
           <label>
@@ -45,6 +46,7 @@ const CustomInput = ({
           onKeyDown={onKeydown}
           value={inputProps.value}
           readOnly={readonly}
+          className={`${classname}`}
           placeholder={placeholder}
           onChange={(val) => inputProps.onChange(val.target.value)}
           onPaste={onPaste}

@@ -29,18 +29,19 @@ export const USE_STATE = (state = LOGIN_STATE) => {
   return state;
 };
 
-export const doLogin = async (form = LOGIN_FORM_SCHEMA,dispatch) => {
-  dispatch({ type: ALL_ACTION.GLOBAL_ACTION.GLOBAL_LOADING_TRUE });
-  dispatch({ type: LOGIN_ACTION.LOGIN_REQUEST });
-  try {
-    const resp = { hoax: "name" }; // FOR API
-    dispatch({ type: LOGIN_ACTION.LOGIN_SUCCESS, payload: resp });
-  } catch (error) {
-    showToast({ message: error.message, type: "error" });
-    dispatch({ type: LOGIN_ACTION.LOGIN_FAILED, payload: error });
-  }
-  showToast({message:"hohohoho"})
-  setTimeout(() => {
-    dispatch({ type: ALL_ACTION.GLOBAL_ACTION.GLOBAL_LOADING_FALSE });
-  }, 4000);
+export const doLogin = async (form = LOGIN_FORM_SCHEMA) => {
+  // dispatch({ type: ALL_ACTION.GLOBAL_ACTION.GLOBAL_LOADING_TRUE });
+  // dispatch({ type: LOGIN_ACTION.LOGIN_REQUEST });
+  // try {
+  //   console.log(form);
+  //   const resp = { hoax: "name" }; // FOR API
+  //   dispatch({ type: LOGIN_ACTION.LOGIN_SUCCESS, payload: resp });
+  // } catch (error) {
+  //   showToast({ message: error.message, type: "error" });
+  //   dispatch({ type: LOGIN_ACTION.LOGIN_FAILED, payload: error });
+  // }
+  // showToast({message:"hohohoho"})
+  // setTimeout(() => {
+  //   dispatch({ type: ALL_ACTION.GLOBAL_ACTION.GLOBAL_LOADING_FALSE });
+  // }, 4000);
 };

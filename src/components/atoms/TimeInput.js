@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import {TimePicker} from "antd"
-import { SysDateTransform } from '../utils/global_store';
+import { SysDateTransform } from '../../utils/global_store';
 function TimeInput(props) {
     const { value, onChange, placeholder,name } = props;
     const handleChange =(val,str)=>{
@@ -14,9 +14,7 @@ function TimeInput(props) {
         value={dayjs(value =='' ||value==null||value == undefined?'00:00:00':value,'HH:mm:ss')}
         name={name??'input_time'}
         className='form-control'
-        format="HH:mm:ss"
-        // minuteStep={1}
-        
+        format="HH:mm:ss"        
         placeholder={placeholder}
       />
     );

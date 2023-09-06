@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const LOGIN_FORM_SCHEMA = {
-  username: yup.string().required("Required"),
+export const LOGIN_FORM_SCHEMA = yup.object({
+  email: yup.string().required("Required").min(2),
   password: yup.string().required("Required"),
-};
+});

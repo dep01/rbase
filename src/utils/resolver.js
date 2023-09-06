@@ -1,11 +1,11 @@
 import * as yup from "yup";
-
-export const useYupValidationResolver = (schema) =>
+import React, { useCallback } from "react";
+export const useYupValidationResolver = (schema) => {
+  // const validationSchema =  yup.object(schema);
   useCallback(
     async (data) => {
-      const validationSchema = yup.ObjectSchema(schema);
       try {
-        const values = await validationSchema.validate(data, {
+        const values = await schema.validate(data, {
           abortEarly: false,
         });
 
@@ -29,5 +29,6 @@ export const useYupValidationResolver = (schema) =>
         };
       }
     },
-    [validationSchema]
+    [schema]
   );
+};

@@ -4,17 +4,17 @@ import {
   SysDateTransform,
   SysGenValueOption,
   SysJWTDecoder,
-  SysMonthTransform,
   addZero,
   showToast,
 } from "../../utils/global_store";
 import Select from "react-select";
 import { sys_labels } from "../../utils/constants";
-import { useLoadingContext } from "../Loading";
 import * as XLSX from "xlsx-js-style";
+import { ALL_ACTION } from "../../redux";
+import { useDispatch } from "react-redux";
 const { Search } = Input;
 
-const DataTablePaginationReport = ({
+const DataTable = ({
   fetchDataFunc,
   columns,
   pageSizeOptions = ["10", "20", "30"],
@@ -24,7 +24,7 @@ const DataTablePaginationReport = ({
   action = [],
   withExport = true,
 }) => {
-  const { showLoading, hideLoading } = useLoadingContext();
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(defaultPageSize);
   const [totalItems, setTotalItems] = useState(0);
@@ -116,15 +116,11 @@ const DataTablePaginationReport = ({
   const genFilter = () => {
     let my_filter = selectedFilters;
     let my_filter_str = "";
-    let my_periode = periode;
     Object.keys(my_filter).map((val) => {
       if (my_filter[val] != "all") {
         my_filter_str += `&${val}=${my_filter[val]}`;
       }
     });
-    my_filter_str += `&periode=${my_periode.year}-${addZero({
-      num: parseInt(my_periode.month) + 1,
-    })}`;
     setFilters(my_filter_str);
     return my_filter_str;
   };
@@ -183,7 +179,7 @@ const DataTablePaginationReport = ({
     );
   };
   const handleExport = async () => {
-    showLoading();
+    dispatch({type:ALL_ACTION.GLOBAL_ACTION.GLOBAL_LOADING_TRUE});
     try {
       let sort = `${sortField}:${sortOrder == "ascend" ? "asc" : "desc"}`;
       if (sortField == "" || sortField == null || sortField == undefined) {
@@ -243,8 +239,8 @@ const DataTablePaginationReport = ({
         colIndex < columns.filter((val) => val.key != "action").length;
         colIndex++
       ) {
-        const cellRef = XLSX.utils.encode_cell({ r: 4, c: colIndex }); 
-        ws[cellRef].s = headerStyle; 
+        const cellRef = XLSX.utils.encode_cell({ r: 4, c: colIndex });
+        ws[cellRef].s = headerStyle;
       }
       ws["!merges"] = [
         {
@@ -295,10 +291,9 @@ const DataTablePaginationReport = ({
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.log(error);
       showToast({ message: error.message });
     }
-    hideLoading();
+    dispatch({type:ALL_ACTION.GLOBAL_ACTION.GLOBAL_LOADING_FALSE});
   };
   return (
     <section className="section">
@@ -362,4 +357,4 @@ const DataTablePaginationReport = ({
   );
 };
 
-export default DataTablePaginationReport;
+export default DataTable;

@@ -1,27 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-mazer-ui";
 import { useNavigate } from "react-router-dom";
-// import { doLogin } from "../../providers/auth";
-import { routes_name } from "../../route/static_route";
 import { clearSession, getSession, setSession } from "../../utils/session";
-import { useSelector, connect } from "react-redux";
-import { SESSION } from "../../utils/constants";
+import { useSelector, connect,useDispatch } from "react-redux";
 import { ALL_ACTION, REDUCER, USE_GLOBAL_STATE } from "../../redux";
-import {doLogin} from "./store"
-import GlobalLoadingBlock from "../../components/Loading";
+import { useForm } from "react-hook-form";
+// import { doLogin } from "./store";
+import { GlobalLoadingBlock, CustomInput } from "../../components";
+import { LOGIN_FORM_SCHEMA } from "./store/schema_form";
+import { useYupValidationResolver } from "../../utils/resolver";
+import { LOGIN_ACTION } from "./store";
+import { showToast } from "../../utils/global_store";
 function Login({dispatch}) {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showDialog, setShowDialog] = useState(false);
+  const resolver = useYupValidationResolver(LOGIN_FORM_SCHEMA);
+  const {
+    handleSubmit,
+    control,
+    formState: { errors,isValid },
+  } = useForm({ resolver });
   const state = useSelector((state) =>
     USE_GLOBAL_STATE(state[REDUCER.GLOBAL_REDUCER])
   );
   useEffect(() => {
+    console.log(LOGIN_FORM_SCHEMA);
     clearSession();
   }, []);
+  
+  const doLogin = async form => {
+  console.log(form);
+  // dispatch({ type: ALL_ACTION.GLOBAL_ACTION.GLOBAL_LOADING_TRUE });
+  // dispatch({ type: LOGIN_ACTION.LOGIN_REQUEST });
+  // try {
+  //   console.log(form);
+  //   const resp = { hoax: "name" }; // FOR API
+  //   dispatch({ type: LOGIN_ACTION.LOGIN_SUCCESS, payload: resp });
+  // } catch (error) {
+  //   showToast({ message: error.message, type: "error" });
+  //   dispatch({ type: LOGIN_ACTION.LOGIN_FAILED, payload: error });
+  // }
+  // showToast({message:"hohohoho"})
+  // setTimeout(() => {
+  //   dispatch({ type: ALL_ACTION.GLOBAL_ACTION.GLOBAL_LOADING_FALSE });
+  // }, 4000);
+  };
   return (
     <div id="auth">
+      {console.log(errors)}
       {state.is_loading && <GlobalLoadingBlock />}
       <div className="row h-100">
         <div className="col-lg-5 col-12">
@@ -34,38 +59,39 @@ function Login({dispatch}) {
             </div>
             <h1 className="auth-title">Log in.</h1>
 
-            <div className="form-group position-relative has-icon-left mb-4">
-              <input
+            <form>
+              <CustomInput
                 type="email"
-                className="form-control form-control-xl"
+                control={control}
                 placeholder="Email"
-                value={email}
-                onChange={(val) => setEmail(val.target.value)}
-              />
-              <div className="form-control-icon">
-                <i className="bi bi-envelope"></i>
-              </div>
-            </div>
-            <div className="form-group position-relative has-icon-left mb-4">
-              <input
+                classname="form-control"
+                name="email"
+                required={true}
+                label="Email"
+                errors={errors.email}
+                id="email"
+                />
+              <CustomInput
                 type="password"
-                className="form-control form-control-xl"
+                control={control}
                 placeholder="Password"
-                value={password}
-                onChange={(val) => setPassword(val.target.value)}
+                classname="form-control validate-error"
+                name="password"
+                required={true}
+                errors={errors.password}
+                label="Password"
+                id="password"
               />
-              <div className="form-control-icon">
-                <i className="bi bi-shield-lock"></i>
-              </div>
-            </div>
 
-            <Button
-              status="primary"
-              size="large"
-              className="btn-block shadow-lg mt-5"
-              label="Login"
-              onClick={()=>doLogin({username:"a",password:"a"},dispatch)}
-            />
+              <Button
+                status="primary"
+                size="large"
+                className="btn-block shadow-lg mt-5"
+                label="Login"
+                type="button"
+                onClick={handleSubmit(doLogin)}
+              />
+            </form>
           </div>
         </div>
         <div className="col-lg-7 d-none d-lg-block">

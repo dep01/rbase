@@ -1,13 +1,13 @@
 import clsx from "clsx";
 import React, { useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, Outlet,useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import {useSelector} from "react-redux"
 import isEmpty from "../../utils/is-empty";
-import HeroIcon from "../../components/HeroIcon";
+import {HeroIcon,GlobalLoadingBlock} from "../../components";
 import {sys_images, sys_labels } from "../../utils/constants";
-import GlobalLoadingBlock from "../../components/Loading";
 import { routes_name } from "../../route/static_route";
+import { REDUCER, USE_GLOBAL_STATE } from "../../redux";
 
 const defaultNav = [
   {
@@ -58,6 +58,7 @@ const defaultNav = [
 const AdminDashboardLayout = () => {
   const location = useLocation();
   // const { isLoading } = useLoadingContext();
+  const state = useSelector(state=>USE_GLOBAL_STATE(state[REDUCER.GLOBAL_REDUCER]))
   const addScript = (src, id) => {
     const el = document.getElementById(id);
     if (el) return;
@@ -79,7 +80,7 @@ const AdminDashboardLayout = () => {
         <script src="/assets/js/mazer.js"></script>
         <script src="/assets/js/app.js"></script>
       </Helmet>
-      {/* {isLoading && <GlobalLoadingBlock />} */}
+      {state.is_loading && <GlobalLoadingBlock />}
       <div id="sidebar" className="active">
         <div className="sidebar-wrapper active">
           <div className="sidebar-header position-relative">
